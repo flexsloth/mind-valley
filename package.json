@@ -16,3 +16,8 @@
     "vercel": "^39.2.2"
   }
 }
+{
+  "scripts": {
+    "build": "echo 'No build step required'"
+  }
+}
