@@ -1,5 +1,4 @@
 # Mind-Valley
-Project made for project exhibition 2
 
 #Steps to open our website:
 -clone this repo
