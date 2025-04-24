@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(session({
-  secret: "Our little secret.",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }))
@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
- 
+
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -51,15 +51,15 @@ passport.deserializeUser(User.deserializeUser());
 
 app.route("/profile")
   .get(function (req, res) {
-    if(req.isAuthenticated()){
-      
-      res.render("profile",{user:req.username,NAME:req.user.username});
-      
+    if (req.isAuthenticated()) {
+
+      res.render("profile", { user: req.username, NAME: req.user.username });
+
     } else {
       res.redirect("/register");
-  }
-})
-   
+    }
+  })
+
 
 app.route("/")
   .get(function (req, res) {
@@ -68,99 +68,100 @@ app.route("/")
 
 app.route("/med")
   .get(function (req, res) {
-    if(req.isAuthenticated()){
+    if (req.isAuthenticated()) {
       res.render("med");
     } else {
       res.redirect("/register");
     }
   })
 app.route("/contact")
-  .get(function(req,res){
+  .get(function (req, res) {
     res.render("mind-valley/Contact-us/index")
   })
 app.route("/articles")
-  .get(function(req,res){
+  .get(function (req, res) {
     res.render("mind-valley/articles/index")
   })
 
-  app.route("/meditation")
-  .get(function(req,res){
+app.route("/meditation")
+  .get(function (req, res) {
     res.render("mind-valley/meditation 1/index")
   })
 
-  app.route("/checkups")
-  .get(function(req,res){
+app.route("/checkups")
+  .get(function (req, res) {
     res.render("mind-valley/test/index")
   })
-  app.route("/anxiety")
-    .get(function(req,res){
-      res.render("mind-valley/test/Anxiety Test/index")
-    })
-    app.route("/depression")
-    .get(function(req,res){
-      res.render("mind-valley/test/Depression Test/index")
-    })
-    app.route("/stress")
-    .get(function(req,res){
-      res.render("mind-valley/test/Stress Test/index")
-    })
-    app.route("/games")
-      .get(function(req,res){
-        res.render("mind-valley/Games/index")
-      })
-    app.route("/bubble")
-    .get(function(req,res){
-      res.render("mind-valley/Games/bubble-mind/index")
-    })
-    app.route("/colour")
-    .get(function(req,res){
-      res.render("mind-valley/Games/colour-switch/index")
-    })
-    app.route("/dart")
-    .get(function(req,res){
-      res.render("mind-valley/Games/dart-shoot/index")
-    })
-    app.route("/drum")
-    .get(function(req,res){
-      res.render("mind-valley/Games/drum-kit/index")
-    })
-    app.route("/simon")
-    .get(function(req,res){
-      res.render("mind-valley/Games/simon-game/index")
-    })
-    app.route("/snow")
-    .get(function(req,res){
-      res.render("mind-valley/Games/snow-dodge/index")
-    })
-  app.get("/register",function (req, res) {
-    res.render("register");
+app.route("/anxiety")
+  .get(function (req, res) {
+    res.render("mind-valley/test/Anxiety Test/index")
   })
+app.route("/depression")
+  .get(function (req, res) {
+    res.render("mind-valley/test/Depression Test/index")
+  })
+app.route("/stress")
+  .get(function (req, res) {
+    res.render("mind-valley/test/Stress Test/index")
+  })
+app.route("/games")
+  .get(function (req, res) {
+    res.render("mind-valley/Games/index")
+  })
+app.route("/bubble")
+  .get(function (req, res) {
+    res.render("mind-valley/Games/bubble-mind/index")
+  })
+app.route("/colour")
+  .get(function (req, res) {
+    res.render("mind-valley/Games/colour-switch/index")
+  })
+app.route("/dart")
+  .get(function (req, res) {
+    res.render("mind-valley/Games/dart-shoot/index")
+  })
+app.route("/drum")
+  .get(function (req, res) {
+    res.render("mind-valley/Games/drum-kit/index")
+  })
+app.route("/simon")
+  .get(function (req, res) {
+    res.render("mind-valley/Games/simon-game/index")
+  })
+app.route("/snow")
+  .get(function (req, res) {
+    res.render("mind-valley/Games/snow-dodge/index")
+  })
+app.get("/register", function (req, res) {
+  res.render("register");
+})
 
-  app.post("/register",function(req,res){
-    User.register({username: req.body.Username_up,email: req.body.Email_up}, req.body.Password_up,function(err,user){
-  if(err){
-    console.log(err);
-    res.redirect('/');
-  } else {
-    res.redirect('/register');
-  }
-    })})
+app.post("/register", function (req, res) {
+  User.register({ username: req.body.Username_up, email: req.body.Email_up }, req.body.Password_up, function (err, user) {
+    if (err) {
+      console.log(err);
+      res.redirect('/');
+    } else {
+      res.redirect('/register');
+    }
+  })
+})
 
-  app.post("/login",function(req,res){
+app.post("/login", function (req, res) {
 
-    const user = new User({
-      username: req.body.Username_in,
-      password: req.body.Password_in
-    });
-  
-    req.login(user, function(err){
-      if (err){
-        console.log(err);
-      } else {
-          res.redirect("/profile");
-      }
-    })
+  const user = new User({
+    username: req.body.Username_in,
+    password: req.body.Password_in
   });
+
+  req.login(user, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/profile");
+    }
+  })
+});
 
 
 app.listen(3000, function () {
